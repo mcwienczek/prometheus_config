@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+  labels:
+    app: grafana
+    component: core
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: grafana
+        component: core
+    spec:
+      containers:
+        - image: grafana/grafana:5.0.0-beta3
+          name: grafana
+          ports:
+          - containerPort: 3000
+          # env:
+          resources:
+            # keep request = limit to keep this container in guaranteed class
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            # This variable is required to setup templates in Grafana.
+              # The following env variables are required to make Grafana accessible via
+              # the kubernetes api-server proxy. On production clusters, we recommend
+              # removing these env variables, setup auth for grafana, and expose the grafana
+              # service using a LoadBalancer or a public IP.
+            # - name: GF_SERVER_ROOT_URL
+            #   value: /api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/
+          volumeMounts:
+          - name: grafana-persistent-storage
+            mountPath: /var
+          - name: grafana-datasources
+            mountPath: /etc/grafana/provisioning/datasources
+          - name: grafana-dashboard-provider
+            mountPath: /etc/grafana/provisioning/dashboards
+          - name: grafana-dashboards
+            mountPath: /var/lib/grafana/dashboards
+      volumes:
+      - name: grafana-datasources
+        configMap:
+          name: grafana-datasources
+      - name: grafana-dashboards
+        configMap:
+          name: grafana-dashboards
+      - name: grafana-dashboard-provider
+        configMap:
+          name: grafana-dashboard-provider
+      - name: grafana-persistent-storage
+        emptyDir: {}
+---
