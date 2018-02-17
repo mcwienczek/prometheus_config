@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Apply kubectl/yaml files first
 kubectl apply --recursive --prune --all -f kubectl 
 
