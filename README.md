@@ -6,7 +6,7 @@ Cluster as code gives you and your organization a lot of benefits. Some of them 
 
 ## Repository contents
 
-This repository contains almost everything I use and deploy to my cluster. However, it is not intended to be used as-is. It is only an example for your future work. You can see grafana and prometheus deployments. This repository also contains tiller deployment, so if you have tiller in your cluster, you should remove it beforehand.
+This repository contains almost everything I use and deploy to my cluster. However, it is not intended to be used as-is. It is only an example for your future work. You can see grafana and prometheus deployments.
 
 In order to apply the configuration in this repository you also need a `basic-auth` secret created by yourself in monitoring namespace. I do not recommend, though, commiting the secret to any repository.
 
